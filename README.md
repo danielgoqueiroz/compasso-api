@@ -6,8 +6,9 @@
 
 GET /user 
 Query Param - name
+Query Param - id
 
-
+```
 POST /user
 {
     "name": "Nome", // maior que 4 caracteres
@@ -15,4 +16,5 @@ POST /user
     "cpf" : "654987321", // deve ser maior que 8 caracteres
     "email": "teste@email.com" // deve ter padrão válido de email
 }
+```
 
