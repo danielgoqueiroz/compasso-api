@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
@@ -36,20 +37,15 @@ public class UserController {
 			@RequestParam(required = false, name = "id") Long id) {
 
 		if (id != null) {
-			Optional<User> findById = users.stream().filter(u -> id == u.getId()).findFirst();
-			if (findById.isPresent()) {
-				User user = findById.get();
-				return ResponseEntity.ok(user);
-			}
+			List<User> findById = users.stream().filter(u -> id == u.getId()).collect(Collectors.toList());
+			return ResponseEntity.ok(findById);
 		}
 
 		if (!Strings.isNullOrEmpty(name)) {
 
-			Optional<User> findByName = users.stream().filter(u -> name.contentEquals(u.getName())).findFirst();
-			if (findByName.isPresent()) {
-				User user = findByName.get();
-				return ResponseEntity.ok(user);
-			}
+			List<User> findByName = users.stream().filter(u -> name.contentEquals(u.getName()))
+					.collect(Collectors.toList());
+			return ResponseEntity.ok(findByName);
 		}
 		return ResponseEntity.ok(users);
 	}
