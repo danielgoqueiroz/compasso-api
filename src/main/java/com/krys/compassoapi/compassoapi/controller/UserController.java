@@ -31,19 +31,21 @@ public class UserController {
 
 	Set<User> users = new HashSet<User>();
 	
-	@DeleteMapping
-	public ResponseEntity<?> getArtists(@RequestParam(required = false, name = "name") Long id) {
+	@DeleteMapping(produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<?> getArtists(@RequestParam(required = false, name = "id") Long id) {
 
-		User user = users.stream().filter(u -> id == u.getId()).findFirst().get();
+		Optional<User> userOpt = users.stream().filter(u -> Long.valueOf(id) == u.getId()).findFirst();
 		
-		if (users.remove(user) ) {
-			return ResponseEntity.ok("Item removido");
-		} else {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-					"O item não pode ser removido");
+		if (userOpt.isPresent()) {
+			User user = userOpt.get();
+			if (users.remove(user) ) {
+				return ResponseEntity.ok("Item removido");
+			} else {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+						"O item não pode ser removido");
+			}
 		}
-		
-		
+		return ResponseEntity.notFound().build();
 		
 	}
 	
