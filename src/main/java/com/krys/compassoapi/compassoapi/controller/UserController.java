@@ -1,6 +1,5 @@
 package com.krys.compassoapi.compassoapi.controller;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +9,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +30,23 @@ import com.krys.compassoapi.compassoapi.model.User;
 public class UserController {
 
 	Set<User> users = new HashSet<User>();
+	
+	@DeleteMapping
+	public ResponseEntity<?> getArtists(@RequestParam(required = false, name = "name") Long id) {
+
+		User user = users.stream().filter(u -> id == u.getId()).findFirst().get();
+		
+		if (users.remove(user) ) {
+			return ResponseEntity.ok("Item removido");
+		} else {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+					"O item não pode ser removido");
+		}
+		
+		
+		
+	}
+	
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> getArtists(@RequestParam(required = false, name = "name") String name,
